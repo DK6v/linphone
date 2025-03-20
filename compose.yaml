@@ -1,0 +1,40 @@
+services:
+  linphone:   
+    image: linphone:${VERSION}
+    build:
+      context: ./docker
+      dockerfile: Dockerfile
+      args:
+        - VERSION=${VERSION}
+    command: setpriv --reuid root --regid root --groups audio -- linphone
+    environment:
+      - DISPLAY=${DISPLAY}
+      - XAUTHORITY=/tmp/.Xauthority
+    security_opt:
+      - apparmor:unconfined
+    volumes:
+      # X11 server socket and authority
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ${XAUTHORITY}:/tmp/.Xauthority:ro
+      # D-Bus session configuration file
+      - /usr/share/dbus-1/session.conf:/usr/share/dbus-1/session.conf
+      # Mount special files
+      - /dev/dri:/dev/dri
+      - /dev/snd:/dev/snd
+      - /var/run/dbus/:/var/run/dbus/
+      # Allow the container to inspect the hostname
+      - /var/run/docker.sock:/var/run/docker.sock
+      # User configuration files
+      - linphone-config:/app/data
+    privileged: true
+    networks:
+      - asterisk-internal
+    restart: "no"
+
+volumes:
+  linphone-config:
+
+networks:
+  asterisk-internal:
+    external: true
+    name: asterisk-internal
