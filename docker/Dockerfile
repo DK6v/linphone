@@ -1,9 +1,7 @@
 ARG TIMEZONE="Europe/Moscow"
-ARG VERSION
 
 # -------------------------------------
-FROM ubuntu:24.04 AS build
-ARG VERSION=
+FROM ubuntu:20.04 AS build
 
 SHELL [ "/bin/bash", "-c" ]
 ENV SHELL="/bin/bash"
@@ -18,13 +16,16 @@ echo "----- Install Linphone packages -----"; \
 export DEBIAN_FRONTEND=noninteractive; \
 apt-get update; \
 apt-cache search linphone; \
-apt-get install -y linphone-desktop${VERSION:+=${VERSION}}; \
+apt-cache show linphone; \
+apt-get install -y linphone; \
 echo "----- DONE -----"
 
 RUN \
 set -e; \
 echo "----- Install Docker extensions -----"; \
-apt-get install -y python3-docker; \
+apt-get install -y \
+  python3-docker \
+  python3-distutils; \
 echo "----- DONE -----"
 
 # Cleanup
