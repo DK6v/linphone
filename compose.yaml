@@ -1,5 +1,5 @@
 services:
-  linphone:   
+  linphone:
     image: linphone:${VERSION}
     build:
       context: ./docker
@@ -28,13 +28,14 @@ services:
       - linphone-config:/app/data
     privileged: true
     networks:
-      - asterisk-internal
+      - linphone-internal
     restart: "no"
+    scale: 1
 
 volumes:
   linphone-config:
 
 networks:
-  asterisk-internal:
-    external: true
-    name: asterisk-internal
+    linphone-internal:
+      name: linphone-internal
+      driver: bridge
