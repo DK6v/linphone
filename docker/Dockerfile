@@ -25,6 +25,7 @@ RUN \
 set -e; \
 echo "----- Install Docker extensions -----"; \
 apt-get install -y python3-docker; \
+apt-get install -y speech-dispatcher; \
 echo "----- DONE -----"
 
 # Cleanup
