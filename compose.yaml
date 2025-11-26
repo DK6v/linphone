@@ -30,7 +30,7 @@ services:
     networks:
       - linphone-internal
     restart: "no"
-    scale: 1
+    scale: 2
 
 volumes:
   linphone-config:
